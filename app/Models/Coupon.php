@@ -20,6 +20,7 @@ class Coupon extends Model
     protected $casts = [
         'valid_from' => 'datetime',
         'valid_until' => 'datetime',
+        'discount_value' => 'float',
     ];
 
     /**

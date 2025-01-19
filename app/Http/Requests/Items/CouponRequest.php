@@ -26,7 +26,7 @@ class CouponRequest
         $validator = Validator::make($filteredData, [
             'description' => 'nullable|string',
             'discount_type' => 'nullable|string|in:percentage,fixed_amount|max:255',
-            'discount_value' => 'required|nullable,numeric',
+            'discount_value' => 'required|numeric',
             'usage_limit' => 'nullable|numeric',
             'used_count' => 'nullable|numeric',
             'valid_from' => 'nullable|date',

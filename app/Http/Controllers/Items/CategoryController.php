@@ -28,7 +28,7 @@ class CategoryController extends Controller
 
         $query = $this->category->orderBy("created_at", $sortMethod);
         if ($search && $search != 'null') {
-            $query->where('service_name', 'LIKE', '%' . $search . '%');
+            $query->where('name', 'LIKE', '%' . $search . '%');
         }
         $data = $query->paginate($perPage);
 
@@ -66,14 +66,13 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $validated = CategoryRequest::validated($request->all());
-        $response = $this->category->where("id", $id)->update($validated);
+        $category = $this->category->findOrFail($id);
 
-        if (! $response) {
-            return $this->errorResponse("No record has been deleted!", 400);
-        }
+        $category->update($validated);
 
         return $this->apiResponse([
-            "message" => "Record has been updated!"
+            "message" => "Record has been updated!",
+            "category" => $category
         ]);
     }
 
@@ -82,10 +81,8 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $deleted = $this->category->where("id", $id)->delete();
-        if (! $deleted) {
-            return $this->errorResponse("No record has been deleted!", 400);
-        }
+        $coupon = $this->category->findOrFail($id);
+        $coupon->delete();
 
         return $this->apiResponse([
             "message" => "Record has been deleted!"
