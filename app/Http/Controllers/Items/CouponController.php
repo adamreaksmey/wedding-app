@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Items\CouponRequest;
 use App\Models\Coupon;
 use Exception;
-use Illuminate\Database\RecordNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Pagination\Paginator;
@@ -48,12 +47,9 @@ class CouponController extends Controller
         $validated = CouponRequest::validated($request->all());
         $validated['code'] = Str::uuid();
 
-        try {
-            $response = $this->coupon->create($validated);
-            return $this->apiResponse($response);
-        } catch (Exception $e) {
-            return $this->errorResponse($e->getMessage(), 400);
-        }
+
+        $response = $this->coupon->create($validated);
+        return $this->apiResponse($response);
     }
 
     /**
@@ -77,7 +73,7 @@ class CouponController extends Controller
 
         return $this->apiResponse([
             "message" => "Record has been updated!",
-            "coupon" => $coupon
+            "data" => $coupon
         ]);
     }
 

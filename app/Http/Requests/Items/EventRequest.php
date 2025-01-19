@@ -11,7 +11,7 @@ class EventRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,15 @@ class EventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'category_id' => ['required', 'exists:categories,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'image' => ['required', 'string', 'url'],
+            'gallery' => ['nullable', 'array'],
+            'gallery.*' => ['string', 'url'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'rating' => ['nullable', 'integer', 'between:1,5'],
+            'location' => ['nullable', 'json'],
         ];
     }
 }

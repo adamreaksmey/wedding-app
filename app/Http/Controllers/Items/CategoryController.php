@@ -72,7 +72,7 @@ class CategoryController extends Controller
 
         return $this->apiResponse([
             "message" => "Record has been updated!",
-            "category" => $category
+            "data" => $category
         ]);
     }
 
