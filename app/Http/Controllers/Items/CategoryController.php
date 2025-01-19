@@ -41,9 +41,9 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $validated = CategoryRequest::validated($request->all());
+        $validated = $request->validated();
         $response = $this->category->create($validated);
 
         return $this->apiResponse($response);
@@ -63,9 +63,9 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CategoryRequest $request, string $id)
     {
-        $validated = CategoryRequest::validated($request->all());
+        $validated = $request->validated();
         $category = $this->category->findOrFail($id);
 
         $category->update($validated);

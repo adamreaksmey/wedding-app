@@ -42,9 +42,9 @@ class CouponController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CouponRequest $request)
     {
-        $validated = CouponRequest::validated($request->all());
+        $validated = $request->validated();
         $validated['code'] = Str::uuid();
 
 
@@ -64,9 +64,9 @@ class CouponController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id)
+    public function update(CouponRequest $request, int $id)
     {
-        $validated = CouponRequest::validated($request->all());
+        $validated = $request->validated();
 
         $coupon = $this->coupon->findOrFail($id);
         $coupon->update($validated);

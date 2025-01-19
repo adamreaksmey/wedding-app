@@ -43,8 +43,12 @@ class EventController extends Controller
      */
     public function store(EventRequest $request)
     {
-        dd($request->validated());
         $validated = $request->validated();
+
+        if (! isset($validated['image']) || ! $validated['image']) {
+            $validated['image'] = image_placeholder();
+        }
+
         $event = $this->event->create($validated);
 
         return $this->apiResponse($event);

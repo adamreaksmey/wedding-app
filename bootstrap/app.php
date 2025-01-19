@@ -4,6 +4,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -18,8 +19,21 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (Throwable $e) {
+            // Check if the exception's code is an integer
+            $statusCode = is_int($e->getCode()) ? $e->getCode() : 500;
+
+            // If the exception is an instance of NotFoundHttpException, return 404
+            if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+                $statusCode = 404;
+            } elseif ($e instanceof \Illuminate\Validation\ValidationException) {
+                $statusCode = 422;
+            } elseif ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+                $statusCode = 404;
+            }
+
             return response()->json([
-                "message" => $e->getMessage()
-            ]);
+                "message" => $e->getMessage(),
+                "error_code" => $e->getCode() ?: 500
+            ], $statusCode);
         });
     })->create();

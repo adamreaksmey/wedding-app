@@ -24,8 +24,8 @@ class EventRequest extends FormRequest
         return [
             'category_id' => ['required', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'image' => ['required', 'string', 'url'],
+            'description' => ['nullable', 'string'],
+            'image' => ['nullable', 'string', 'url'],
             'gallery' => ['nullable', 'array'],
             'gallery.*' => ['string', 'url'],
             'price' => ['required', 'numeric', 'min:0'],

@@ -3,26 +3,28 @@
 namespace App\Http\Requests\Items;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest
+class CategoryRequest extends FormRequest
 {
-    public static function validated($data)
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
     {
-        // Whitelist of fields that should be allowed
-        $allowedFields = ['name', 'image'];
+        return true;
+    }
 
-        // Only keep fields that are in the allowed list
-        $filteredData = array_intersect_key($data, array_flip($allowedFields));
-
-        $validator = Validator::make($filteredData, [
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
             'name' => 'required|string|max:255',
             'image' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            abort(response()->json(['errors' => $validator->errors()], 422));
-        }
-
-        return $validator->validated();
+        ];
     }
 }

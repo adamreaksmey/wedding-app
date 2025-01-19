@@ -3,27 +3,27 @@
 namespace App\Http\Requests\Items;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 
 
-class CouponRequest
+class CouponRequest extends FormRequest
 {
-    public static function validated($data)
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
     {
-        // Whitelist of fields that should be allowed
-        $allowedFields = [
-            'description',
-            'discount_type',
-            'discount_value',
-            'usage_limit',
-            'used_count',
-            'valid_from',
-            'valid_until'
-        ];
+        return true;
+    }
 
-        // Only keep fields that are in the allowed list
-        $filteredData = array_intersect_key($data, array_flip($allowedFields));
-
-        $validator = Validator::make($filteredData, [
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
             'description' => 'nullable|string',
             'discount_type' => 'nullable|string|in:percentage,fixed_amount|max:255',
             'discount_value' => 'required|numeric',
@@ -31,12 +31,6 @@ class CouponRequest
             'used_count' => 'nullable|numeric',
             'valid_from' => 'nullable|date',
             'valid_until' => 'nullable|date|after_or_equal:valid_from',
-        ]);
-
-        if ($validator->fails()) {
-            abort(response()->json(['errors' => $validator->errors()], 422));
-        }
-
-        return $validator->validated();
+        ];
     }
 }
