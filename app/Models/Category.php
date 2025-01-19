@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Category extends Model
 {
     use HasFactory, SoftDeletes;
+    protected $table = 'categories';
 
     protected $guarded = [
         'id',
@@ -16,4 +17,9 @@ class Category extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }

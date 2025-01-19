@@ -57,4 +57,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'event_user')
+            ->withPivot('start_date', 'end_date', 'coupon_id', 'paid_status')
+            ->withTimestamps()
+            ->using(EventUser::class);
+    }
 }
