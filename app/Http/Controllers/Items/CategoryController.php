@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Items;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Items\CategoryRequest;
-use App\Models\Category;
 use Illuminate\Pagination\Paginator;
+use App\Http\Requests\Items\CategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -68,7 +68,13 @@ class CategoryController extends Controller
         $validated = CategoryRequest::validated($request->all());
         $response = $this->category->where("id", $id)->update($validated);
 
-        return $this->apiResponse($response);
+        if (! $response) {
+            return $this->errorResponse("No record has been deleted!", 400);
+        }
+
+        return $this->apiResponse([
+            "message" => "Record has been updated!"
+        ]);
     }
 
     /**
@@ -77,8 +83,12 @@ class CategoryController extends Controller
     public function destroy(string $id)
     {
         $deleted = $this->category->where("id", $id)->delete();
-        $response = $this->apiResponse($deleted);
+        if (! $deleted) {
+            return $this->errorResponse("No record has been deleted!", 400);
+        }
 
-        return $response;
+        return $this->apiResponse([
+            "message" => "Record has been deleted!"
+        ]);
     }
 }

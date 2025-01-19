@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
-
+use App\Http\Controllers\Items\CategoryController;
 
 // AUTH
 Route::post('register', [AuthController::class, 'register']);
@@ -14,4 +14,7 @@ Route::middleware('auth.jwt')->group(function () {
     Route::get('user', [AuthController::class, 'get_authorized_user']);
     // logout
     Route::post('logout', [AuthController::class, 'logout']);
+
+    // Items
+    Route::apiResource('category', CategoryController::class);
 });
