@@ -3,16 +3,37 @@
 namespace App\Http\Controllers\Items;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 
 class CouponController extends Controller
 {
+    public function __construct(private Coupon $coupon) {}
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $sortMethod = $request->sort ?? 'desc';
+        $search = $request->search;
+        $perPage = $request->perPage ?? 10;
+        $page = $request->page ?? 1;
+
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
+        $query = $this->coupon->orderBy("created_at", $sortMethod);
+        if ($search && $search != 'null') {
+            $query->where('service_name', 'LIKE', '%' . $search . '%');
+        }
+        $data = $query->paginate($perPage);
+
+        $response = $this->apiResponse($data);
+        $response['total_count'] = $this->coupon->count();
+
+        return $response;
     }
 
     /**
