@@ -20,5 +20,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         app('router')->aliasMiddleware('auth.jwt', \App\Http\Middleware\JwtAuthMiddleware::class);
+        require_once app_path('Helpers/_masterData.php');
     }
 }

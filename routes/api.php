@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\Helpers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
@@ -23,4 +24,9 @@ Route::middleware('auth.jwt')->group(function () {
     Route::apiResource('coupon', CouponController::class);
     Route::apiResource('event', EventController::class);
     Route::apiResource('event_user', EventUserController::class);
+});
+
+// Provinces
+Route::get('/get_all_provinces', function () {
+    return Helpers::all_provinces();
 });

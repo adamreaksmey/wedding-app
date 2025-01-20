@@ -1,6 +1,6 @@
 <?php
 
-$provinces = [
+return $provinces = [
     [
         "state_code" => "Banteay Meanchey",
         "state_name" => "Banteay Meanchey"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Items;
 
+use App\Helpers\Helpers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Items\EventRequest;
@@ -46,7 +47,7 @@ class EventController extends Controller
         $validated = $request->validated();
 
         if (! isset($validated['image']) || ! $validated['image']) {
-            $validated['image'] = image_placeholder();
+            $validated['image'] = Helpers::image_placeholder();
         }
 
         $event = $this->event->create($validated);
