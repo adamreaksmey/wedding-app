@@ -1,4 +1,5 @@
 <?php
+include "./_masterData.php";
 
 if (! function_exists('image_placeholder')) {
     /**
@@ -7,5 +8,13 @@ if (! function_exists('image_placeholder')) {
     function image_placeholder()
     {
         return "https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI";
+    }
+}
+
+if (! function_exists('all_provinces')) {
+    function all_provinces()
+    {
+        global $provinces;
+        return $provinces;
     }
 }
