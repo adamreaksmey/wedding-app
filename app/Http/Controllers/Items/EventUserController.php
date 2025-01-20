@@ -3,24 +3,35 @@
 namespace App\Http\Controllers\Items;
 
 use App\Http\Controllers\Controller;
+use App\Models\EventUser;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 
 class EventUserController extends Controller
 {
+    public function __construct(private EventUser $event_user) {}
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
+        $sortMethod = $request->sort ?? 'desc';
+        // $search = $request->search;
+        $perPage = $request->perPage ?? 10;
+        $page = $request->page ?? 1;
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
+        $query = $this->event_user->orderBy("created_at", $sortMethod);
+        $data = $query->paginate($perPage);
+
+        $response = $this->apiResponse($data);
+
+        $response['total_count'] = $this->event_user->count();
+        return $response;
     }
 
     /**
@@ -35,14 +46,6 @@ class EventUserController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
     {
         //
     }
