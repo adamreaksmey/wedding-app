@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Items;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Items\EventUserRequest;
 use App\Models\EventUser;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -37,32 +38,48 @@ class EventUserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(EventUserRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $event_user = $this->event_user->create($validated);
+
+        return $this->apiResponse($event_user);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
-        //
+        $event_user = $this->event_user->findOrFail($id);
+        return $this->apiResponse($event_user);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
-        //
+        $validated = $request->validated();
+        $event_user = $this->event_user->findOrFail($id);
+        $event_user->update($validated);
+
+        return $this->apiResponse([
+            "message" => "Record has been updated!",
+            "data" => $event_user
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        //
+        $event_user = $this->event_user->findOrFail($id);
+        $event_user->delete($id);
+
+        return $this->apiResponse([
+            "message" => "Record has been deleted!"
+        ]);
     }
 }

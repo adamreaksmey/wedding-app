@@ -22,7 +22,12 @@ class EventUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "event_id" => ['required', 'numeric', 'exists:events,id'],
+            "user_id" => ['required', 'numeric', 'exists:user,id'],
+            "coupon_id" => ["nullable", 'numeric', 'coupons,id'],
+            "start_date" => ["nullable", "date"],
+            'end_date' => ['nullable', 'date', 'after_or_equal:valid_from'],
+            'paid_status' => ['nullable', 'in:unpaid,paid,refunded']
         ];
     }
 }
