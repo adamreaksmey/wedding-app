@@ -58,7 +58,7 @@ class EventUserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id)
+    public function update(EventUserRequest $request, int $id)
     {
         $validated = $request->validated();
         $event_user = $this->event_user->findOrFail($id);

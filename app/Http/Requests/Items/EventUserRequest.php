@@ -27,7 +27,8 @@ class EventUserRequest extends FormRequest
             "coupon_id" => ["nullable", 'numeric', 'exists:coupons,id'],
             "start_date" => ["nullable", "date"],
             'end_date' => ['nullable', 'date', 'after_or_equal:valid_from'],
-            'paid_status' => ['nullable', 'in:unpaid,paid,refunded']
+            'paid_status' => ['nullable', 'in:unpaid,paid,refunded'],
+            "description" => ['nullable', 'string']
         ];
     }
 }
