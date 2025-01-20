@@ -22,7 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             // Main error message
             $message = $e->getMessage();
             // Check if the exception's code is an integer
-            $statusCode = is_int($e->getCode()) ? $e->getCode() : 500;
+            $statusCode = (is_int($e->getCode()) && $e->getCode() > 0) ? $e->getCode() : 500;
 
             // If the exception is an instance of NotFoundHttpException, return 404
             if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
@@ -35,7 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return response()->json([
                 "message" => $message,
-                "error_code" => $statusCode
+                "error_code" => $e->getCode() ?: 500
             ], $statusCode);
         });
     })->create();
