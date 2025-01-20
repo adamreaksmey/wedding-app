@@ -19,6 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (Throwable $e) {
+            // Main error message
+            $message = $e->getMessage();
             // Check if the exception's code is an integer
             $statusCode = is_int($e->getCode()) ? $e->getCode() : 500;
 
@@ -32,8 +34,8 @@ return Application::configure(basePath: dirname(__DIR__))
             }
 
             return response()->json([
-                "message" => $e->getMessage(),
-                "error_code" => $e->getCode() ?: 500
+                "message" => $message,
+                "error_code" => $statusCode
             ], $statusCode);
         });
     })->create();

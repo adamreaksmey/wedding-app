@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Items\CategoryController;
 use App\Http\Controllers\Items\CouponController;
 use App\Http\Controllers\Items\EventController;
+use App\Http\Controllers\Items\EventUserController;
 
 // AUTH
 Route::post('register', [AuthController::class, 'register']);
@@ -21,4 +22,5 @@ Route::middleware('auth.jwt')->group(function () {
     Route::apiResource('category', CategoryController::class);
     Route::apiResource('coupon', CouponController::class);
     Route::apiResource('event', EventController::class);
+    Route::apiResource('event_user', EventUserController::class);
 });
