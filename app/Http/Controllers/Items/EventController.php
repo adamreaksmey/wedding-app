@@ -23,10 +23,16 @@ class EventController extends Controller
         $search = $request->search;
         $perPage = $request->perPage ?? 10;
         $page = $request->page ?? 1;
+        $categoryId = $request->categoryId;
+
+        $query = $this->event->orderBy("created_at", $sortMethod);
+
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
 
         if ($pagination == 'false') {
-            $query = $this->event->orderBy("created_at", $sortMethod)->get();
-            $response = $this->apiResponse($query);
+            $response = $this->apiResponse($query->get());
             $response['total_count'] = $this->event->count();
 
             return $response;
@@ -36,7 +42,6 @@ class EventController extends Controller
             return $page;
         });
 
-        $query = $this->event->orderBy("created_at", $sortMethod);
         if ($search && $search != 'null') {
             $query->where('name', 'LIKE', '%' . $search . '%');
         }
