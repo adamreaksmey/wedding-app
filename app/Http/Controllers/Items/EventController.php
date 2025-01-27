@@ -18,10 +18,19 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
+        $pagination = $request->pagination ?? 'true';
         $sortMethod = $request->sort ?? 'desc';
         $search = $request->search;
         $perPage = $request->perPage ?? 10;
         $page = $request->page ?? 1;
+
+        if ($pagination == 'false') {
+            $query = $this->event->orderBy("created_at", $sortMethod)->get();
+            $response = $this->apiResponse($query);
+            $response['total_count'] = $this->event->count();
+
+            return $response;
+        }
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
